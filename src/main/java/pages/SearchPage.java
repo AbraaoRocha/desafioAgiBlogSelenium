@@ -1,7 +1,9 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
@@ -9,19 +11,22 @@ public class SearchPage {
 
     private WebDriver driver;
 
-    private By results = By.cssSelector("article");
-    private By noResults = By.xpath("//*[contains(text(),'Nenhum resultado')]");
+    @FindBy(css = "article")
+    private List<WebElement> results;
+
+    @FindBy(xpath = "//*[contains(text(),'Nenhum resultado')]")
+    private WebElement noResultsMessage;
 
     public SearchPage(WebDriver driver) {
         this.driver = driver;
+        PageFactory.initElements(driver, this);
     }
 
     public boolean hasResults() {
-        List<?> elements = driver.findElements(results);
-        return elements.size() > 0;
+        return results.size() > 0;
     }
 
     public boolean hasNoResultsMessage() {
-        return driver.findElements(noResults).size() > 0;
+        return noResultsMessage.isDisplayed();
     }
 }
